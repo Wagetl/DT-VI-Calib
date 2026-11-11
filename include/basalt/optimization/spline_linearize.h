@@ -131,7 +131,7 @@ struct LinearizeSplineOpt : public LinearizeBase<Scalar> {
   }
 
   void operator()(const tbb::blocked_range<ImuDataIter>& r) {
-    for (const IntegratedImuMeasurement<double>::Ptr imu_meas : r) {
+    for (const IntegratedImuMeasurement<double>::Ptr& imu_meas : r) {
       MatrixX Jp;
       VectorX r;
       Jp.resize(POSE_VEL_SIZE, 2 * POSE_VEL_SIZE + ACCEL_BIAS_SIZE + GYRO_BIAS_SIZE + G_SIZE);
@@ -586,7 +586,7 @@ struct ComputeErrorSplineOpt : public LinearizeBase<Scalar> {
   }
 
   void operator()(const tbb::blocked_range<ImuDataIter>& r) {
-    for (const IntegratedImuMeasurement<double>::Ptr imu_meas : r) {
+    for (const IntegratedImuMeasurement<double>::Ptr& imu_meas : r) {
       const int64_t start_t = imu_meas->get_start_t_ns();
       const int64_t end_t = imu_meas->imu_buff.back().t_ns;
       if (!timestam_to_frame_states.count(start_t))

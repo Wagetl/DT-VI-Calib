@@ -25,6 +25,9 @@ Song, Junlin, Antoine Richard, and Miguel Olivares-Mendez. ["**Unleashing the Po
 ```
 
 ## Installation
+### Docker on macOS
+Apple Silicon Mac users can follow [Docker setup and calibration commands](doc/DockerMac.md).
+
 ### Tested for Ubuntu 20.04
 ```
 git clone https://github.com/JunlinSong/DT-VI-Calib
