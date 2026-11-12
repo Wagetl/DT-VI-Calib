@@ -50,7 +50,9 @@ docker compose exec -T calib build/docker/basalt_calibrate_imu \
 
 `--result-path` 末尾的 `/` 必须保留，程序直接用它拼接文件名。第二步从这个目录读取第一步生成的 `calibration.json`。更换数据集、标定板或跳帧参数时使用新的结果目录，避免复用旧角点和位姿缓存。重复相机标定会覆盖同目录中的 `calibration.json`。
 
-当前上游 IMU 入口在 `src/calibrate_imu.cpp` 中固定注入 `td_set{50}`，即 50 ms 时间偏移；最终变换、误差和耗时打印在日志中，入口没有调用 `saveCalib()`，所以不能把相机阶段的 `calibration.json` 当作 IMU 最终标定文件。
+IMU 入口默认注入 50 ms 时间偏移，可在命令后添加 `--time-offset-ms 10` 改成 10 ms，或用 `--time-offset-ms 0` 不注入。它改变读取后的 IMU 时间戳，不修改原始 bag。最终变换、误差和耗时打印在日志中，入口没有调用 `saveCalib()`，所以不能把相机阶段的 `calibration.json` 当作 IMU 最终标定文件。
+
+10、20、30、40、50 ms 各重复三次的结果、逐轮收敛 CSV、原始日志和曲线见 [时间延迟实验记录](../experiments/time_delay_2026-11-12/README.md)。
 
 ## 查看和停止
 

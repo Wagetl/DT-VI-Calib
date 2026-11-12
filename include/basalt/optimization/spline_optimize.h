@@ -993,7 +993,7 @@ class SplineOptimization {
     }
 
     cam_time_offset += calib->cam_time_offset_ns * 1e-9;
-    printf(RED "cam_time_offset %f s.\n" RESET, cam_time_offset);
+    printf(RED "cam_time_offset %.9f s.\n" RESET, cam_time_offset);
 
     //    std::cout << "bias_block_offset " << bias_block_offset << std::endl;
     //    std::cout << "mocap_block_offset " << mocap_block_offset << std::endl;

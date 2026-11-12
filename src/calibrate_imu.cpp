@@ -46,6 +46,7 @@ int main(int argc, char **argv) {
   std::string result_path;
   std::string cache_dataset_name = "calib-cam-imu";
   int skip_images = 1;
+  std::vector<int> td_set{50};
 
   double accel_noise_std = 0.016;
   double gyro_noise_std = 0.000282;
@@ -77,6 +78,8 @@ int main(int argc, char **argv) {
                  "Name to save cached files");
 
   app.add_option("--skip-images", skip_images, "Number of images to skip")->required();
+  app.add_option("--time-offset-ms", td_set,
+                 "Artificial offset added to IMU timestamps in milliseconds (default: 50)");
 
   try {
     app.parse(argc, argv);
@@ -92,7 +95,6 @@ int main(int argc, char **argv) {
   // cv.renderingLoop();
 
   // std::vector<int> td_set{-50, -40, -30, -20, -10, 10, 20, 30, 40, 50};
-  std::vector<int> td_set{50};
 
   for (size_t idx = 0; idx < td_set.size(); idx++)
   {
@@ -102,6 +104,7 @@ int main(int argc, char **argv) {
       {accel_noise_std, gyro_noise_std, accel_bias_std, gyro_bias_std}, false);
 
     cv.td = td_set[idx] * 0.001;
+    printf("[TIME_OFFSET_EXPERIMENT] injected_ms=%d\n", td_set[idx]);
     cv.loadDataset();
     if (cv.exe_detectCorners)
     {

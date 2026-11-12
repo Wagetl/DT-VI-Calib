@@ -1,0 +1,139 @@
+[TIME_OFFSET_EXPERIMENT] injected_ms=50
+imu_topic: /imu0
+mocap_topic: /vrpn_client/raw_transform
+cam_topics: /cam0/image_raw /cam1/image_raw 
+Total number of messages: 18117
+Image size: 1038
+Min time: 1520527958463478167 max time: 1520528010408996167 mocap to imu offset: 50000000
+Number of mocap poses: 5695
+Loaded detected corners from: /workspace/build/time-delay-q7p4quwr/calib-cam-imu_detected_corners.cereal
+Loaded initial poses from: /workspace/build/time-delay-q7p4quwr/calib-cam-imu_init_poses.cereal
+Loaded calibration from: /workspace/build/time-delay-q7p4quwr/calibration.json
+T_i_c0
+  -0.998365   -0.056873 -0.00567498           0
+  0.0118162   -0.108235   -0.994055           0
+  0.0559207   -0.992497     0.10873           0
+          0           0           0           1
+Done Camera-IMU extrinsics initialization:
+T_i_c0:
+  -0.998365   -0.056873 -0.00567498           0
+  0.0118162   -0.108235   -0.994055           0
+  0.0559207   -0.992497     0.10873           0
+          0           0           0           1
+T_i_c1:
+   -0.998315   -0.0573179  -0.00904476    -0.101004
+   0.0125553   -0.0611855    -0.998047 -0.000290741
+   0.0566526    -0.996479    0.0618021   0.00416847
+           0            0            0            1
+g_a initialized with 0.361164  9.58312 0.626106
+IMU dt: 0.0050159 freq: 199.366
+Initialized optimization.
+[LINEARIZE] Error: 2.13421e+08 num points 291330
+[31msetup_time 10.000000 ms.
+[0m[31mcam_time_offset 0.037888412 s.
+[0m	[ACCEPTED] lambda:1e-12 step_quality: 0.963179 max_inc: 2.19393 Error: 8.73067e+06 num points 291330
+[31miter_time 8.000000 ms.
+[0m==================================
+intrinsics 0:   154.697   154.682   254.691   256.849 -0.193222  0.587618
+T_i_c0:
+  -0.999709 -0.00521966  -0.0235394    0.044557
+   0.023741  -0.0426762   -0.998807   -0.278655
+ 0.00420886   -0.999075   0.0427878  -0.0377545
+          0           0           0           1
+intrinsics 1:   154.137   154.138   252.375   254.824 -0.193189  0.586523
+T_i_c1:
+   -0.99969 -0.00486829  -0.0244168  -0.0567375
+  0.0243953  0.00441312   -0.999693   -0.277808
+ 0.00497455   -0.999978 -0.00429299  -0.0390189
+          0           0           0           1
+ g -0.10306 -9.77714 0.795633 norm: 9.81
+Current error: 8.73067e+06 num_points 291330 mean_error 29.9683 reprojection_error 1.52604e+06 mean reprojection 5.23819 opt_time 20ms.
+==================================
+[LINEARIZE] Error: 8.73067e+06 num points 291330
+[31msetup_time 7.000000 ms.
+[0m[31mcam_time_offset 0.050014767 s.
+[0m	[ACCEPTED] lambda:3.33333e-13 step_quality: 2.0271 max_inc: 2.20237 Error: 700884 num points 291330
+[31miter_time 8.000000 ms.
+[0m==================================
+intrinsics 0:   154.697   154.682   254.691   256.849 -0.193222  0.587618
+T_i_c0:
+  -0.999552  0.00755051  -0.0289508   0.0448243
+  0.0286725  -0.0346836   -0.998987  -0.0614491
+-0.00854698    -0.99937   0.0344516  -0.0331305
+          0           0           0           1
+intrinsics 1:   154.137   154.138   252.375   254.824 -0.193189  0.586523
+T_i_c1:
+ -0.999539 0.00814565 -0.0292498 -0.0562555
+   0.02935  0.0124722  -0.999491 -0.0599274
+-0.0077767  -0.999889 -0.0127056 -0.0356264
+         0          0          0          1
+ g 0.0404012  -9.69839  -1.47502 norm: 9.81
+Current error: 700884 num_points 291330 mean_error 2.40581 reprojection_error 249054 mean reprojection 0.854886 opt_time 17ms.
+==================================
+[LINEARIZE] Error: 700884 num points 291330
+[31msetup_time 7.000000 ms.
+[0m[31mcam_time_offset 0.050166295 s.
+[0m	[ACCEPTED] lambda:1.11111e-13 step_quality: 1.2618 max_inc: 0.244827 Error: 4797.84 num points 291330
+[31miter_time 8.000000 ms.
+[0m==================================
+intrinsics 0:   154.697   154.682   254.691   256.849 -0.193222  0.587618
+T_i_c0:
+  -0.999545  0.00768388  -0.0291719   0.0459496
+  0.0288873  -0.0348617   -0.998975  -0.0697764
+-0.00869298   -0.999363   0.0346238    -0.04511
+          0           0           0           1
+intrinsics 1:   154.137   154.138   252.375   254.824 -0.193189  0.586523
+T_i_c1:
+  -0.999532  0.00828109  -0.0294508  -0.0551088
+  0.0295517   0.0123382   -0.999487  -0.0682325
+-0.00791347    -0.99989  -0.0125772  -0.0475898
+          0           0           0           1
+ g 0.0369529  -9.69972  -1.46631 norm: 9.81
+Current error: 4797.84 num_points 291330 mean_error 0.0164687 reprojection_error 25379.3 mean reprojection 0.0871154 opt_time 16ms.
+==================================
+[LINEARIZE] Error: 4797.84 num points 291330
+[31msetup_time 7.000000 ms.
+[0m[31mcam_time_offset 0.050164556 s.
+[0m	[ACCEPTED] lambda:3.7037e-14 step_quality: 1.04696 max_inc: 0.00161296 Error: 4682.79 num points 291330
+[31miter_time 8.000000 ms.
+[0m==================================
+intrinsics 0:   154.697   154.682   254.691   256.849 -0.193222  0.587618
+T_i_c0:
+  -0.999545   0.0076776  -0.0291714   0.0459365
+  0.0288869  -0.0348686   -0.998974  -0.0695823
+-0.00868689   -0.999362    0.034631  -0.0450403
+          0           0           0           1
+intrinsics 1:   154.137   154.138   252.375   254.824 -0.193189  0.586523
+T_i_c1:
+  -0.999532   0.0082753  -0.0294483  -0.0551233
+  0.0295491   0.0123311   -0.999487  -0.0680384
+-0.00790792    -0.99989  -0.0125698  -0.0475199
+          0           0           0           1
+ g 0.0368296   -9.6995  -1.46781 norm: 9.81
+Current error: 4682.79 num_points 291330 mean_error 0.0160738 reprojection_error 25328.5 mean reprojection 0.086941 opt_time 17ms.
+==================================
+[LINEARIZE] Error: 4682.79 num points 291330
+[31msetup_time 7.000000 ms.
+[0m[31mcam_time_offset 0.050164554 s.
+[0m	[ACCEPTED] lambda:1.23457e-14 step_quality: 2.90371 max_inc: 1.38477e-05 Error: 4682.75 num points 291330
+[CONVERGED]
+[31miter_time 8.000000 ms.
+[0m==================================
+intrinsics 0:   154.697   154.682   254.691   256.849 -0.193222  0.587618
+T_i_c0:
+  -0.999545   0.0076776  -0.0291714   0.0459364
+  0.0288869  -0.0348686   -0.998974  -0.0695816
+-0.00868689   -0.999362    0.034631  -0.0450404
+          0           0           0           1
+intrinsics 1:   154.137   154.138   252.375   254.824 -0.193189  0.586523
+T_i_c1:
+  -0.999532  0.00827529  -0.0294483  -0.0551234
+  0.0295491   0.0123311   -0.999487  -0.0680377
+-0.00790792    -0.99989  -0.0125698    -0.04752
+          0           0           0           1
+ g 0.0368285   -9.6995  -1.46783 norm: 9.81
+Current error: 4682.75 num_points 291330 mean_error 0.0160737 reprojection_error 25328.4 mean reprojection 0.0869407 opt_time 17ms.
+Optimization Converged !!
+==================================
+[31mtotal opt_time 88.000000 ms.
+[0m
