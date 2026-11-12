@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the downloaded TUM VI bag at 0 ms, then 10..50 ms three times each."""
+"""Run the downloaded TUM VI bag at 0 ms, then repeat offsets 10..50 ms."""
 
 import argparse
 import csv
@@ -88,7 +88,7 @@ def plot_results(output, results, traces):
 
     fig, axes = plt.subplots(2, 3, figsize=(13, 7), layout="constrained")
     for ax, delay in zip(axes.flat, (0, 10, 20, 30, 40, 50)):
-        for repeat in range(4):
+        for repeat in sorted({row["repeat"] for row in results}):
             points = [row for row in traces if row["injected_ms"] == delay
                       and row["repeat"] == repeat and row["status"] != "rejected"]
             if points:
@@ -107,7 +107,7 @@ def plot_results(output, results, traces):
     plt.close(fig)
 
     fig, axes = plt.subplots(1, 2, figsize=(11, 4), layout="constrained")
-    for repeat in (1, 2, 3):
+    for repeat in sorted({row["repeat"] for row in results} - {0}):
         points = [row for row in results if row["repeat"] == repeat]
         x = [row["injected_ms"] for row in points]
         axes[0].plot(x, [row["estimate_ms"] for row in points], ".-", label=f"Run {repeat}")
@@ -129,7 +129,13 @@ def plot_results(output, results, traces):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("output", type=Path, help="New output directory; existing directories are refused")
-    output = parser.parse_args().output.resolve()
+    parser.add_argument("--repeats", type=int, default=3, help="Runs per injected offset (default: 3)")
+    parser.add_argument("--record-rejected-trials", action="store_true",
+                        help="Record diagnostic runs with rejected trials; mark their estimates unvalidated")
+    args = parser.parse_args()
+    if args.repeats < 1:
+        parser.error("--repeats must be positive")
+    output = args.output.resolve()
     import matplotlib  # Check the plotting dependency before starting experiments.
     dataset = ROOT / "build/datasets/dataset-calib-imu1_512_16.bag"
     inputs = [dataset, ROOT / "data/aprilgrid_6x6.json"]
@@ -147,7 +153,8 @@ def main():
         input_files={str(path.relative_to(ROOT)): dict(bytes=path.stat().st_size,
                                                       sha256=sha256(path)) for path in inputs},
         source_sha256={name: sha256(ROOT / name) for name in (
-            "src/calibrate_imu.cpp", "include/basalt/optimization/spline_optimize.h",
+            "src/calibrate_imu.cpp", "src/calibration/cam_imu_calib.cpp",
+            "include/basalt/optimization/spline_optimize.h",
             "scripts/time_delay_experiments.py")},
         matplotlib_version=matplotlib.__version__, runs=[])
     manifest["container"] = subprocess.check_output(
@@ -157,7 +164,7 @@ def main():
         work = Path(work)
         for name in cache_names:
             shutil.copy2(ROOT / "build/results" / name, work / name)
-        for repeat, delay in [(0, 0)] + [(r, d) for r in (1, 2, 3) for d in (10, 20, 30, 40, 50)]:
+        for repeat, delay in [(0, 0)] + [(r, d) for r in range(1, args.repeats + 1) for d in (10, 20, 30, 40, 50)]:
             stem = f"delay_{delay:02d}ms_run_{repeat}"
             command = ["docker", "compose", "exec", "-T", "calib", "build/docker/basalt_calibrate_imu",
                        "--dataset-path", "/workspace/" + str(dataset.relative_to(ROOT)),
@@ -176,10 +183,10 @@ def main():
                 raise ValueError("Injected offset was not confirmed by the executable")
             rows, opt_ms, reprojection = parse_log(text)
             rejected = sum(row["status"] == "rejected" for row in rows)
-            # shortcut: upstream rollback does not restore all time-shifted state; stop if a rejected trial occurs.
-            if rejected:
+            # shortcut: upstream rollback is incomplete; rejected trials are diagnostic unless rollback is repaired.
+            if rejected and not args.record_rejected_trials:
                 raise ValueError(f"{stem}: rejected LM trial; inspect upstream rollback before evaluating")
-            estimate = rows[-1]["estimate_ms"]
+            estimate = next(row["estimate_ms"] for row in reversed(rows) if row["status"] == "accepted")
             if repeat == 0:
                 baseline = estimate
             result = dict(repeat=repeat, injected_ms=delay, estimate_ms=estimate,
@@ -187,6 +194,7 @@ def main():
                           recovered_added_delay_ms=estimate - baseline,
                           baseline_corrected_error_ms=estimate - baseline - delay,
                           iterations=rows[-1]["iteration"], rejected_trials=rejected,
+                          final_trial_status=rows[-1]["status"], validated=not rejected,
                           optimizer_ms=opt_ms, wall_s=wall_s, mean_reprojection_px=reprojection)
             results.append(result)
             traces.extend(dict(repeat=repeat, injected_ms=delay, **row) for row in rows)
@@ -201,8 +209,11 @@ def main():
     for delay in (10, 20, 30, 40, 50):
         group = [row for row in results if row["injected_ms"] == delay]
         values = [row["estimate_ms"] for row in group]
-        summary.append(dict(injected_ms=delay, run1_ms=values[0], run2_ms=values[1], run3_ms=values[2],
-                            mean_ms=statistics.mean(values), sample_std_ms=statistics.stdev(values),
+        summary.append(dict(injected_ms=delay,
+                            **{f"run{i}_ms": value for i, value in enumerate(values, 1)},
+                            mean_ms=statistics.mean(values),
+                            sample_std_ms=statistics.stdev(values) if len(values) > 1 else None,
+                            validated=all(row["validated"] for row in group),
                             mean_raw_error_ms=statistics.mean(values) - delay,
                             mean_baseline_corrected_error_ms=statistics.mean(values) - baseline - delay))
     write_csv(output / "summary.csv", summary)
