@@ -40,6 +40,9 @@ make -j8
 ```
 
 ## How to use?
+
+源码解析：[联合标定中的优化向量如何更新](doc/联合标定优化向量更新解析.md)。
+
 1, download a calibration file: dataset-calib-imu1_512_16.bag
 ```
 https://cdn2.vision.in.tum.de/tumvi/calibrated/512_16/
